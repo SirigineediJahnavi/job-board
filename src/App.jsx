@@ -6,6 +6,18 @@ export default function App() {
   const [skillFilter, setSkillFilter] = useState('');
   const [yoeFilter, setYoeFilter] = useState('');
 
+  // Define the fetch function first so it is available immediately
+  const fetchJobs = async () => {
+    const { data, error } = await supabase
+      .from('Jobs')
+      .select('*')
+      .order('id', { ascending: false });
+
+    if (!error && data) {
+      setJobs(data);
+    }
+  };
+
   useEffect(() => {
     fetchJobs();
 
@@ -26,18 +38,7 @@ export default function App() {
     };
   }, []);
 
-  async function fetchJobs() {
-    const { data, error } = await supabase
-      .from('Jobs')
-      .select('*')
-      .order('id', { ascending: false });
-
-    if (!error && data) {
-      setJobs(data);
-    }
-  }
-
-  // Filter jobs based on the text typed in the search bars
+  // Filter jobs based on input text
   const filteredJobs = jobs.filter((job) => {
     const matchesSkill = job.skills?.toLowerCase().includes(skillFilter.toLowerCase()) || false;
     const matchesYoe = job.yoe?.toLowerCase().includes(yoeFilter.toLowerCase()) || false;
