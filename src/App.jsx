@@ -7,15 +7,15 @@ export default function App() {
   const [yoeFilter, setYoeFilter] = useState('');
 
   const fetchJobs = async () => {
+    // Note: Make sure your Supabase table name matches exactly ('Jobs' or 'jobs')
     const { data, error } = await supabase
       .from('Jobs')
       .select('*')
       .order('id', { ascending: false });
 
     if (error) {
-      console.error('Error fetching jobs:', error);
+      console.error('Supabase error:', error.message);
     } else if (data) {
-      console.log('Fetched jobs:', data);
       setJobs(data);
     }
   };
@@ -76,7 +76,7 @@ export default function App() {
 
       <div style={{ display: 'grid', gap: '16px' }}>
         {filteredJobs.length === 0 ? (
-          <p style={{ color: '#666', textAlign: 'center', padding: '20px' }}>No matching jobs found. (Check console if data exists in Supabase)</p>
+          <p style={{ color: '#666', textAlign: 'center', padding: '20px' }}>No matching jobs found.</p>
         ) : (
           filteredJobs.map((job) => (
             <div key={job.id || job.created_at} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
