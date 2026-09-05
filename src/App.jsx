@@ -6,21 +6,20 @@ export default function App() {
   const [skillFilter, setSkillFilter] = useState('');
   const [yoeFilter, setYoeFilter] = useState('');
 
-  const fetchJobs = async () => {
-    // Note: Make sure your Supabase table name matches exactly ('Jobs' or 'jobs')
-    const { data, error } = await supabase
-      .from('Jobs')
-      .select('*')
-      .order('id', { ascending: false });
-
-    if (error) {
-      console.error('Supabase error:', error.message);
-    } else if (data) {
-      setJobs(data);
-    }
-  };
-
   useEffect(() => {
+    const fetchJobs = async () => {
+      const { data, error } = await supabase
+        .from('Jobs')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (error) {
+        console.error('Supabase error:', error.message);
+      } else if (data) {
+        setJobs(data);
+      }
+    };
+
     fetchJobs();
 
     const channel = supabase
