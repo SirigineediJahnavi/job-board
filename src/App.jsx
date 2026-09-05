@@ -6,7 +6,6 @@ export default function App() {
   const [skillFilter, setSkillFilter] = useState('');
   const [yoeFilter, setYoeFilter] = useState('');
 
-  // Define the fetch function first so it is available immediately
   const fetchJobs = async () => {
     const { data, error } = await supabase
       .from('Jobs')
@@ -21,7 +20,6 @@ export default function App() {
   useEffect(() => {
     fetchJobs();
 
-    // Keep real-time listener active
     const channel = supabase
       .channel('realtime-jobs')
       .on(
@@ -38,7 +36,6 @@ export default function App() {
     };
   }, []);
 
-  // Filter jobs based on input text
   const filteredJobs = jobs.filter((job) => {
     const matchesSkill = job.skills?.toLowerCase().includes(skillFilter.toLowerCase()) || false;
     const matchesYoe = job.yoe?.toLowerCase().includes(yoeFilter.toLowerCase()) || false;
@@ -47,8 +44,16 @@ export default function App() {
 
   return (
     <div style={{ padding: '24px', fontFamily: 'system-ui, sans-serif', maxWidth: '800px', margin: '0 auto' }}>
-      <h1>Automated Job Board</h1>
-      <p style={{ color: '#666' }}>Filter jobs live by your skills or experience level.</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+        <div>
+          <h1 style={{ margin: '0 0 4px 0' }}>Automated Job Board</h1>
+          <p style={{ color: '#666', margin: 0 }}>Filter jobs live by your skills or experience level.</p>
+        </div>
+        {/* Job Count Badge */}
+        <div style={{ background: '#e0e7ff', color: '#1e40af', padding: '8px 16px', borderRadius: '20px', fontWeight: '600', fontSize: '0.9rem' }}>
+          Total Jobs: {filteredJobs.length} {filteredJobs.length !== jobs.name && `(of ${jobs.length})`}
+        </div>
+      </div>
 
       {/* Filter Input Fields */}
       <div style={{ display: 'flex', gap: '12px', margin: '20px 0', flexWrap: 'wrap' }}>
